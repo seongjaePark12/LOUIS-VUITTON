@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_psj.dao.MemberDAO">
+	<select id="getIdCheck" resultType="com.spring.cjs2108_psj.vo.MemberVO">
+		select * from LVmember where mid = #{mid}; 
+	</select>
+	
+	<select id="getEmailCheck" resultType="com.spring.cjs2108_psj.vo.MemberVO">
+		select * from LVmember where email = #{email}; 
+	</select>
+	
+	<insert id="setMemJoin">
+    insert into LVmember values (default,#{vo.mid},#{vo.pwd},#{vo.name},#{vo.birth},#{vo.email},#{vo.getCode},#{vo.address},#{vo.emailInfor},default,default,default,default,default);
+	</insert>
+	
+	<update id="setVisitUpdate">
+		update LVmember set lastDate=now() where mid = #{mid};
+	</update>
+	
+	<select id="getMidConfirm" resultType="com.spring.cjs2108_psj.vo.MemberVO">
+		select * from LVmember where name = #{name} and email = #{email};
+	</select>
+	
+	<select id="getPwdConfirm" resultType="com.spring.cjs2108_psj.vo.MemberVO">
+		select * from LVmember where mid = #{mid} and name = #{name} and email = #{email};
+	</select>
+	
+	<update id="setPwdChange">
+		update LVmember set pwd = #{pwd} where mid = #{mid};
+	</update>
+	
+	<update id="setMemDelete">
+		update LVmember set userDel = 'OK' where mid = #{mid};
+	</update>
+	
+	<update id="setMyUpdate">
+		update LVmember set pwd=#{vo.pwd},name=#{vo.name},birth=#{vo.birth},email=#{vo.email},getCode=#{vo.getCode},address=#{vo.address},emailInfor=#{vo.emailInfor} where mid=#{vo.mid};
+	</update>
+	
+	<select id="getQuestionList" resultType="com.spring.cjs2108_psj.vo.QuestionVO">
+		select * from LVquestion where mid = #{mid} order by idx desc;
+	</select>
+	
+	<select id="getQuestionContent" resultType="com.spring.cjs2108_psj.vo.QuestionVO">
+		select * from LVquestion where idx = #{idx};
+	</select>
+	
+	<select id="getQuestionReply" resultType="com.spring.cjs2108_psj.vo.QuestionReplyVO">
+		select * from questionReply where questionIdx = #{idx};
+	</select>
+	
+	<select id="bookingList" resultType="com.spring.cjs2108_psj.vo.BookingVO">
+		select * from LVbooking where mid = #{mid};
+	</select>
+	
+	<insert id="myBookingInput">
+		insert into LVbooking values (default,#{vo.mid},#{vo.name},#{vo.booDate},#{vo.booTime});
+	</insert>
+	
+	<update id="myBookingUpdate">
+		update LVbooking set booDate=#{vo.booDate},booTime=#{vo.booTime} where mid = #{vo.mid};
+	</update>
+	
+	<delete id="myBookingDelete">
+		delete from LVbooking where mid = #{mid};
+	</delete>
+	
+	<select id="totRecCntQuestion"  resultType="int">
+		select count(*) from LVquestion where mid = #{mid};
+	</select>
+	
+	<select id="totRecCntQuestionMain" resultType="int">
+		select count(*) from LVquestion where mid = #{mid} and anser = 1;
+	</select>
+	
+	<select id="getDbMyOrderMain"  resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+		select oder.*,baesong.* from LVOrder oder join LVBaesong baesong using(orderIdx) where baesong.mid=#{mid} and baesong.orderStatus = '결제완료';
+	</select>
+	
+</mapper>

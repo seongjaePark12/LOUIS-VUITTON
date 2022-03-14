@@ -1,0 +1,187 @@
+* {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font-size: 14px; 
+}
+a,
+a:hover,
+a:focus {
+  -webkit-transition-duration: 500ms;
+  transition-duration: 500ms;
+  text-decoration: none;
+  outline: 0 solid transparent;
+  color: #000000;
+  font-weight: 600;
+  font-size: 14px;
+  color: #474747; }
+
+ul,
+ol {
+  margin: 0; }
+  ul li,
+  ol li {
+    list-style: none; }
+.nav-brand{
+  margin: 0;
+}
+#lvlolo{
+  color: #000000;
+  font-weight: bold;
+  font-size: x-large;
+}
+/* :: 5.0 Header Area CSS */
+.header-area {
+  position: relative;
+  z-index: 100;
+  width: 100%; }
+.header-area .delicious-main-menu {
+  position: relative;
+  width: 100%;
+  z-index: 100;
+  height: 100px; }
+@media only screen and (max-width: 767px) {
+  .header-area .delicious-main-menu {
+    height: 80px; 
+  } 
+}
+.header-area .delicious-main-menu .classy-nav-container {
+  background-color: transparent;
+}
+.header-area .delicious-main-menu .classy-navbar {
+  margin-top: 30px;
+  height: 100px;
+  padding: 0; 
+}
+@media only screen and (max-width: 767px) {
+  .header-area .delicious-main-menu .classy-navbar {
+    height: 80px; 
+  } 
+}
+.header-area .delicious-main-menu .classy-navbar .classynav ul li a {
+  font-weight: 600; 
+}
+.header-area .delicious-main-menu .classy-navbar .classynav ul li a:hover, .header-area .delicious-main-menu .classy-navbar .classynav ul li a:focus {
+  font-weight: 600; 
+}
+.header-area .delicious-main-menu .classy-navbar .classynav > ul > li > a {
+  text-transform: uppercase;
+  padding: 12px 18px 11px;
+  background-color: transparent;
+  border-bottom: 3px solid transparent;
+  line-height: 1;
+  color: #474747;
+  font-weight: 600; 
+}
+.header-area .delicious-main-menu .classy-navbar .classynav > ul > li > a:hover, .header-area .delicious-main-menu .classy-navbar .classynav > ul > li > a:focus {
+  font-size: 14px;
+  color: #ffffff;
+  background-color: lightgrey;
+  border-bottom: 3px solid lightgrey; 
+}
+.header-area .delicious-main-menu .classy-navbar .classynav > ul > li > a:hover::after, .header-area .delicious-main-menu .classy-navbar .classynav > ul > li > a:focus::after {
+  color: #ffffff; 
+}
+.footer {
+width: 100%;
+background: black;
+display: block;
+}
+.inner-footer {
+background: black;
+width: 95%;
+margin: auto;
+padding: 10px 10px;
+display: flex;
+flex-wrap: wrap;
+box-sizing: border-box;
+justify-content: center;
+}
+.footer-items {
+width: 25%;
+padding: 10px 20px;
+box-sizing: border-box;
+}
+.footerH1 {
+padding: 10px 0;
+font-size: 25px;
+color: #fff;
+text-transform: uppercase;
+}
+.footer-items p {
+color: white;
+font-size: 12px;
+text-align: justify;
+line-height: 20px;
+}
+.footerH2 {
+margin: 10px 0;
+padding: 10px 0;
+color: white;
+font-size: 16px;
+font-weight: lighter;
+text-transform: uppercase;
+}
+.border {
+height: 2px;
+width: 40px;
+}
+.footerUi{
+list-style: none;
+color: #fff;
+font-size: 15px;
+letter-spacing: 0.5px;
+}
+.footerA{
+text-decoration: none;
+outline: none;
+color: #fff;
+transition: 0.3s;
+}
+.footerA:hover {
+color: goldenrod;
+}
+.footerLi {
+margin: 10px 0;
+height: 25px;
+}
+.footerLi i {
+margin-right: 20px;
+}
+.social-media {
+width: 100%;
+color: #fff;
+text-align: center;
+}
+.social-media a{
+text-decoration: none;
+}
+.social-media i {
+height: 15px;
+width: 15px;
+margin: 20px 5px;
+padding: 12px;
+color: #fff;
+border-radius: 50%;
+border: 1px solid grey;
+float:left;
+}
+.footer-bottom {
+padding: 10px;
+width: 93%;
+margin: auto;
+background: black;
+color: #fff;
+font-size: 12px;
+}
+@media screen and (max-width: 1085px) {
+  .footer-items {
+  width: 50%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .footer-items {
+  width: 100%;
+  }
+}
