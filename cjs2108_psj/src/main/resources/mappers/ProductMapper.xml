@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_psj.dao.ProductDAO">
+	<select id="getCategoryMain" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+		select * from LVcategoryMain order by categoryMainCode desc;
+	</select>
+		
+	<select id="getCategoryMiddle" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+	  SELECT middle.*,main.categoryMainName AS categoryMainName
+	  	FROM LVcategoryMiddle middle, LVcategoryMain main WHERE middle.categoryMainCode=main.categoryMainCode
+	  	ORDER BY middle.categoryMiddleCode desc;
+	</select>
+	
+	<select id="getCategorySub" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+	  SELECT sub.*,main.categoryMainName as categoryMainName,middle.categoryMiddleName as categoryMiddleName
+	  	FROM LVcategorySub sub, LVcategoryMiddle middle, LVcategoryMain main WHERE sub.categoryMiddleCode=middle.categoryMiddleCode and sub.categoryMainCode=main.categoryMainCode
+	  	ORDER BY sub.categorySubCode desc;
+	</select>
+		
+	<select id="getCategoryMiddleName" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+		select * from LVcategoryMiddle where categoryMainCode = #{categoryMainCode};
+	</select>
+	
+	<select id="getCategorySubName" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+		select * from LVcategorySub where categoryMainCode = #{categoryMainCode} and categoryMiddleCode = #{categoryMiddleCode};
+	</select>
+	
+	<select id="getCategoryMainOne" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+	  select * from LVcategoryMain where categoryMainCode = #{categoryMainCode} or categoryMainName = #{categoryMainName};
+	</select>
+	
+	<select id="getCategoryMiddleOne" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+	  select * from LVcategoryMiddle where categoryMiddleCode = #{vo.categoryMiddleCode} or (categoryMainCode = #{vo.categoryMainCode} and categoryMiddleName = #{vo.categoryMiddleName});
+	</select>
+	
+	<select id="getCategorySubOne" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+	  select * from LVcategorySub where categorySubCode = #{vo.categorySubCode} or 
+	    (categoryMainCode = #{vo.categoryMainCode} and categoryMiddleCode = #{vo.categoryMiddleCode} and categorySubName = #{vo.categorySubName});
+	</select>
+		
+	<select id="getDbProductOne" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+	  select * from LVproduct where categorySubCode = #{categorySubCode};
+<!-- 	  select * from LVproduct where substring(productCode,4,3) = #{categorySubCode}; -->
+	</select>
+	
+	<insert id="categoryMainInput">
+	  insert into LVcategoryMain value (#{vo.categoryMainCode},#{vo.categoryMainName});
+	</insert>
+	
+	<insert id="categoryMiddleInput">
+	  insert into LVcategoryMiddle value (#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categoryMiddleName});
+	</insert>
+	
+	<insert id="categorySubInput">
+	  insert into LVcategorySub value (#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categorySubCode},#{vo.categorySubName});
+	</insert>
+	
+	<delete id="delCategoryMain">
+	  delete from LVcategoryMain where categoryMainCode = #{categoryMainCode};
+	</delete>
+	
+	<delete id="delCategoryMiddle">
+	  delete from LVcategoryMiddle where categoryMiddleCode = #{categoryMiddleCode};
+	</delete>
+	
+	<delete id="delCategorySub">
+	  delete from LVcategorySub where categorySubCode = #{categorySubCode};
+	</delete>
+	
+	<select id="productCodeCheck" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+		select * from LVproduct where productCode = #{productCode};
+	</select>
+	
+	<insert id="setProductInput">
+		insert into LVproduct values (default,#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categorySubCode},#{vo.productCode},#{vo.productName},#{vo.realPrice},#{vo.mainPrice},#{vo.point},#{vo.disPrice},#{vo.productMainImg},#{vo.productContent},#{vo.productContent2},#{vo.productSubImg},default);
+	</insert>
+		
+	 <select id="getShopList" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+	 	<if test="disPriceSw ==''">
+	    select * from LVproduct order by idx desc limit #{startIndexNo}, #{pageSize};
+	 	</if>
+	 	<if test="disPriceSw == 'HIGH'">
+	    select * from LVproduct order by mainPrice desc limit #{startIndexNo}, #{pageSize};
+	 	</if>
+	 	<if test="disPriceSw == 'HIGHD'">
+	    select * from LVproduct order by disPrice desc limit #{startIndexNo}, #{pageSize};
+	 	</if>
+	 	<if test="disPriceSw == 'LOW'">
+	    select * from LVproduct order by mainPrice limit #{startIndexNo}, #{pageSize};
+	 	</if>
+	 	<if test="disPriceSw == 'LOWD'">
+	    select * from LVproduct order by disPrice limit #{startIndexNo}, #{pageSize};
+	 	</if>
+  </select>
+  
+	 <select id="getShopListProduct" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+	    select * from LVproduct where productName like concat('%',#{productName},'%') limit #{startIndexNo}, #{pageSize};
+  </select>
+  
+  <select id="getCategoryProuctName" resultType="com.spring.cjs2108_psj.vo.CategoryVO">
+		select * from LVproduct where categoryMainCode = #{categoryMainCode} and categoryMiddleCode = #{categoryMiddleCode}and categorySubCode = #{categorySubCode};
+	</select>
+	
+	<insert id="optionInput">
+		insert into LVOption values (default, #{vo.productIdx},#{vo.optionName},#{vo.optionColor},#{vo.optionNum});
+	</insert>
+	
+	<select id="getProductIdx" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+		select * from LVproduct where categoryMainCode = #{categoryMainCode} and categoryMiddleCode = #{categoryMiddleCode}and categorySubCode = #{categorySubCode};
+	</select>
+	
+	<select id="totRecCnt" resultType="int">
+		select count(*) from LVproduct;
+	</select>
+	
+	<select id="totRecProductNameCnt" resultType="int">
+		select count(*) from LVproduct where productName like concat('%',#{productName},'%');
+	</select>
+  
+  <delete id="setProductDelete">
+  	delete from LVproduct where idx = #{idx};
+  </delete>
+  
+  <delete id="setProductOPDelete">
+  	delete from LVOption where idx = #{idx};
+  </delete>
+  
+  <select id="getProductContent" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+  	select * from LVproduct where idx = #{idx};
+  </select>
+  
+  <update id="setProductUpdate">
+  	update LVproduct set categoryMainCode=#{vo.categoryMainCode},categoryMiddleCode=#{vo.categoryMiddleCode},categorySubCode=#{vo.categorySubCode},
+  	productCode=#{vo.productCode},productName=#{vo.productName},realPrice=#{vo.realPrice},mainPrice=#{vo.mainPrice},
+  	point=#{vo.point},disPrice=#{vo.disPrice},productMainImg=#{vo.productMainImg},productContent=#{vo.productContent},
+  	productContent2=#{vo.productContent2},productSubImg=#{vo.productSubImg} where idx= #{vo.idx};
+  </update>
+  	
+  <update id="setOptionUpdate">
+  	update LVOption set optionName=#{vo.optionName},optionColor=#{vo.optionColor},optionNum=#{vo.optionNum} where idx = #{vo.idx};
+  </update>
+</mapper>

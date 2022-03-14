@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_psj.dao.NoticeDAO">
+	<select id="totRecCnt" resultType="int">
+		select count(*) from LVnotice;
+	</select>
+	
+	<select id="getNoticeAdmin" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select *,cast(timestampdiff(minute, dateNow, now())/60 as signed integer) as diffTime from LVnotice order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<insert id="setBoardInput">
+		insert into LVnotice values(default,#{vo.name},#{vo.title},#{vo.content},default,#{vo.hostIp},#{vo.mid},#{vo.notice});
+	</insert>
+	
+	<select id="getNoticeContent" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select * from LVnotice where idx = #{idx};
+	</select>
+	
+	<select id="getPreNext" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select idx,title from LVnotice where idx in (
+			(select idx from LVnotice where <![CDATA[idx < #{idx}]]> order by idx desc limit 1),
+			(select idx from LVnotice where <![CDATA[idx > #{idx}]]> order by idx limit 1));
+	</select>
+	
+	<update id="setNoticeUpdate">
+		update LVnotice set title=#{vo.title},content=#{vo.content},dateNow=now(),hostIp=#{vo.hostIp},notice=#{vo.notice} where idx=#{vo.idx};
+	</update>
+	
+	<delete id="setNoticeServiceDelete">
+		delete from LVnotice where idx = #{idx}
+	</delete>
+	
+	<delete id="setNoticeDelete">
+		delete from LVnotice where idx = #{idx};
+	</delete>
+	
+	<update id="setNoticeLevel">
+		update LVnotice set notice = #{notice} where idx = #{idx};
+	</update>
+</mapper>
