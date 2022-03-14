@@ -1,0 +1,41 @@
+@charset "UTF-8";
+    .layer  {
+      border:0px;
+      width:100%;
+      padding-top:10px;
+      padding-bottom:10px;
+      margin-left:1px;
+      background-color:#eee;
+    }
+    .numBox {width:60px}
+    .price  {
+      width:160px;
+      background-color:#eee;
+      text-align:right;
+      font-size:1.2em;
+      border:0px;
+      outline: none;
+    }
+    .totalPrice {
+      text-align:right;
+      margin-right:10px;
+      color:#f63;
+      font-size:1.5em;
+      font-weight: bold;
+      border:0px;
+      outline: none;
+    }
+    .buttongroup {
+      text-align: center;
+    }
+    .mybtn2 {
+			width: 45%;
+			height: 35px;
+			background: linear-gradient(120deg,#9C7521,#FFDF73);
+			border-radius: 4px;
+			border: 0;
+			color: white;
+		}
+		.mybtn2:hover{
+			background-position: right;
+		}

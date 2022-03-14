@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_psj.dao.SupportDAO">
+	
+	<select id="simpleGet" resultType="com.spring.cjs2108_psj.vo.SimpleVO">
+		<if test="what eq ''">select * from LVSimple order by idx desc;</if>
+		<if test="what != ''">select * from LVSimple where what = #{what} order by idx desc;</if>
+	</select>
+	
+	<select id="totRecCnt" resultType="int">
+		select count(*) from LVnotice;
+	</select>
+	
+	<select id="getNoticeAdmin" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select *,cast(timestampdiff(minute, dateNow, now())/60 as signed integer) as diffTime from LVnotice order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<select id="getNoticeAdmin1" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select *,cast(timestampdiff(minute, dateNow, now())/60 as signed integer) as diffTime from LVnotice where notice = 1 order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<select id="getNoticeContent" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select * from LVnotice where idx = #{idx};
+	</select>
+	
+	<select id="getPreNext" resultType="com.spring.cjs2108_psj.vo.NoticeVO">
+		select idx,title from LVnotice where idx in (
+			(select idx from LVnotice where <![CDATA[idx < #{idx}]]> order by idx desc limit 1),
+			(select idx from LVnotice where <![CDATA[idx > #{idx}]]> order by idx limit 1));
+	</select>
+	
+	<select id="totRecCntQuestion" resultType="int">
+		<if test="what == ''">select count(*) from LVquestion;</if>
+		<if test="what != ''">select count(*) from LVquestion where what = #{what};</if>
+	</select>
+	
+	<select id="getQuestionList" resultType="com.spring.cjs2108_psj.vo.QuestionVO">
+		<if test="what == ''">select * from LVquestion order by idx desc limit #{startIndexNo}, #{pageSize};</if>
+		<if test="what != ''">select * from LVquestion where what = #{what} order by idx desc limit #{startIndexNo}, #{pageSize};</if>
+	</select>
+	
+	<insert id="setQuestionInput">
+		insert into LVquestion values (default, #{vo.mid}, #{vo.title}, #{vo.what}, #{vo.content}, default , #{vo.hostIp}, default);
+	</insert>
+	
+	<select id="getQuestionContent" resultType="com.spring.cjs2108_psj.vo.QuestionVO">
+		select * from LVquestion where idx = #{idx};
+	</select>
+	
+	<select id="getQuestionReply" resultType="com.spring.cjs2108_psj.vo.QuestionReplyVO">
+		select * from questionReply where questionIdx = #{idx};
+	</select>
+	
+	<update id="setQuestionUpdate">
+		update LVquestion set title=#{vo.title},what=#{vo.what},content=#{vo.content},dateNow=now(),hostIp=#{vo.hostIp} where idx=#{vo.idx};
+	</update>
+	
+	<delete id="setQuestionDelete">
+		delete from LVquestion where idx=#{idx};
+	</delete>
+	
+	<insert id="setReplyInsert">
+		insert into questionReply values (default,#{rVo.questionIdx},#{rVo.mid},default,#{rVo.hostIp},#{rVo.content});
+	</insert>
+	
+	<delete id="setReplyDelete">
+		delete from questionReply where idx = #{replyIdx};
+	</delete>
+	
+	<update id="setReplyInsert2">
+		update questionReply set hostIp=#{rVo.hostIp},content=#{rVo.content};
+	</update>
+	
+	
+</mapper>

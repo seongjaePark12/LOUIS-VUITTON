@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_psj.dao.ShopDAO">
+	
+	<select id="getCartCount" resultType="int">
+		select count(*) from LVCartList where mid = #{mid};
+	</select>
+	
+	<select id="totRecCntStatusWish" resultType="int">
+		select count(*) from LVwish where mid = #{mid};
+	</select>
+
+	<select id="shopMain" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+		<if test="disPriceSw ==''">
+	    select *,(select wish from LVwish where productIdx = LVproduct.idx and mid = #{mid}) as wishCheck from LVproduct where categoryMainCode = #{Lpart} and categoryMiddleCode = #{Mpart} and categorySubCode = #{Spart}  group by idx order by idx desc;
+    </if>
+		<if test="disPriceSw == 'POP' and (Lpart != '' or Mpart != '' or Spart != '')">
+	    select *,(select wish from LVwish where productIdx = LVproduct.idx and mid = #{mid}) from LVproduct where categoryMainCode = #{Lpart} and categoryMiddleCode = #{Mpart} and categorySubCode = #{Spart} order by wishCnt desc;
+    </if>
+		<if test="disPriceSw == 'HIGH' and (Lpart != '' or Mpart != '' or Spart != '')">
+	    select *,(select wish from LVwish where productIdx = LVproduct.idx and mid = #{mid}) from LVproduct where categoryMainCode = #{Lpart} and categoryMiddleCode = #{Mpart} and categorySubCode = #{Spart} order by disPrice desc;
+    </if>
+		<if test="disPriceSw == 'LOW' and (Lpart != '' or Mpart != '' or Spart != '')">
+	    select *,(select wish from LVwish where productIdx = LVproduct.idx and mid = #{mid}) from LVproduct where categoryMainCode = #{Lpart} and categoryMiddleCode = #{Mpart} and categorySubCode = #{Spart} order by disPrice;
+    </if>
+	</select>
+  
+  <select id="getShopProduct" resultType="com.spring.cjs2108_psj.vo.ProductVO">
+  	select * from LVproduct where idx = #{idx};
+  </select>
+  
+  <select id="getShopOption" resultType="com.spring.cjs2108_psj.vo.OptionVO">
+  	select * from LVOption where productIdx = #{idx} order by idx;
+  </select>
+
+  <select id="wishProductSearch" resultType="com.spring.cjs2108_psj.vo.WishVO">
+  	select * from LVwish where productIdx = #{idx} and mid = #{mid};
+  </select>
+
+  <select id="cartListProductOptionSearch" resultType="com.spring.cjs2108_psj.vo.CartListVO">
+  	select * from LVCartList where productName=#{productName} and optionName=#{optionName} and optionColor=#{optionColor} and mid = #{mid};
+  </select>
+  
+  <select id="getCartList" resultType="com.spring.cjs2108_psj.vo.CartListVO">
+  	select * from LVCartList where mid = #{mid} order by idx;
+  </select>
+  
+  <select id="getWishList" resultType="com.spring.cjs2108_psj.vo.WishVO">
+  	select * from LVwish where mid = #{mid} and productIdx = #{idx};
+  </select>
+  
+  <select id="getWishListMy" resultType="com.spring.cjs2108_psj.vo.WishVO">
+  	select * from LVwish where mid = #{mid};
+  </select>
+  
+  <!-- wish 못함 -->
+  <select id="getWishListAll" resultType="com.spring.cjs2108_psj.vo.WishVO">
+  	select * from LVwish where mid = #{mid} and productIdx = #{idx};
+  </select>
+  <!-- wish 못함 -->
+  <select id="getCartIdx" resultType="com.spring.cjs2108_psj.vo.CartListVO">
+    select * from LVCartList where idx = #{idx};
+  </select>
+  
+  <select id="getOrderMaxIdx" resultType="com.spring.cjs2108_psj.vo.OrderVO">
+    select max(idx) as maxIdx from LVOrder;
+  </select>
+  
+  <select id="getOrderOIdx" resultType="int">
+    select max(idx) from LVOrder where orderIdx = #{orderIdx};
+  </select>
+  
+  <select id="getBaesong" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    select * from LVBaesong where mid = #{mid};
+  </select>
+  
+  <select id="getOrderBaesong" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    select * from LVBaesong where orderIdx = #{orderIdx};
+  </select>
+    
+  <select id="totRecCnt" resultType="int">
+    <if test="mid == '전체'">
+	    select count(*) from LVOrder;
+    </if>
+    <if test="mid != '전체'">
+	    select count(*) from LVBaesong where mid = #{mid};
+    </if>
+  </select>
+    
+  <select id="getDbMyOrder" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    select oder.*,baesong.* from LVOrder oder join LVBaesong baesong using(orderIdx) where baesong.mid=#{mid} order by baesong.idx desc limit #{startIndexNo},#{pageSize};
+  </select>
+    
+  <select id="totRecCntStatus" resultType="int">
+    <if test="orderStatus == '전체'">
+	    select count(*) from LVOrder a join LVBaesong b using(orderIdx) where b.mid=#{mid};
+    </if>
+    <if test="orderStatus != '전체'">
+	    select count(*) from LVOrder a join LVBaesong b using(orderIdx) where b.mid=#{mid} and b.orderStatus=#{orderStatus};
+    </if>
+  </select>
+    
+  <select id="getOrderStatus" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    <if test="orderStatus == '전체'">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) where b.mid=#{mid} order by b.idx desc;
+    </if>
+    <if test="orderStatus != '전체'">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) where b.mid=#{mid} and b.orderStatus=#{orderStatus} order by b.idx desc;
+    </if>
+  </select>
+    
+  <select id="getOrderStatus2" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) where b.mid=#{mid} order by b.idx desc;
+  </select>
+    
+  <select id="totRecCntOrderCondition" resultType="int">
+    select count(*) from LVOrder a join LVBaesong b using(orderIdx) <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(subdate(now(), INTERVAL #{conditionDate} DAY)) and date(orderDate) <= date(now()) order by orderDate desc ]]>;
+  </select>
+  
+  <select id="orderCondition" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(subdate(now(), INTERVAL #{conditionDate} DAY)) and date(orderDate) <= date(now()) order by orderDate desc ]]>;
+  </select>
+    
+  <select id="totRecCntAdminStatus" resultType="int">
+    <if test="orderStatus == '전체'">
+	    select count(*) from LVOrder a join LVBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="orderStatus != '전체'">
+	    select count(*) from LVOrder a join LVBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{orderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+    
+  <select id="adminOrderStatus" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    <if test="orderStatus == '전체'">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) order by a.idx desc;
+    </if>
+    <if test="orderStatus != '전체'">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) where b.orderStatus=#{orderStatus} order by a.idx desc;
+    </if>
+  </select>
+    
+  <select id="getOrderAdminStatus" resultType="com.spring.cjs2108_psj.vo.BaesongVO">
+    <if test="orderStatus == '전체'">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="orderStatus != '전체'">
+      select a.*,b.* from LVOrder a join LVBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{orderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+  
+  <select id="chartSearch" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+  	select * from LVcharts where productIdx = #{productIdx} and orderDate = #{date};
+  </select>
+  
+  <insert id="shopCartInput">
+  	insert into LVCartList values (default,default,#{vo.mid},#{vo.productIdx},#{vo.productName},#{vo.productCode},#{vo.realPrice},#{vo.mainPrice},#{vo.point},#{vo.disPrice},#{vo.productMainImg},#{vo.optionIdx},#{vo.optionName},#{vo.optionColor},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="setDbOrder">
+    insert into LVOrder values (default,#{vo.orderIdx},#{vo.mid},#{vo.productIdx},default,#{vo.productName},#{vo.realPrice},#{vo.mainPrice},#{vo.point},#{vo.disPrice},#{vo.productMainImg},#{vo.optionName},#{vo.optionColor},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="chartInput"> <!-- 차트 =================================== -->
+    insert into LVcharts values (default,#{vo.productIdx},#{date},#{vo.productName},#{vo.realPrice}*#{optionNum},#{vo.disPrice}*#{optionNum},(#{vo.disPrice}*#{optionNum})-(#{vo.realPrice}*#{optionNum}),#{optionNum});
+  </insert>
+    
+  <insert id="setDbBaesong">
+    insert into LVBaesong values (default,#{bVo.oIdx},#{bVo.orderIdx},#{bVo.orderTotalPrice},#{bVo.mid},#{bVo.name},#{bVo.address},#{bVo.getCode},#{bVo.email},#{bVo.message},#{bVo.payment},#{bVo.payMethod},#{bVo.baesongNum},default);
+  </insert>
+  
+  <insert id="shopWishInput">
+  	insert into LVwish values (default, #{vo.mid},#{vo.productIdx},#{vo.productName},#{vo.productCode},#{vo.disPrice},#{vo.productMainImg},#{vo.wish});
+  </insert>
+  
+  <delete id="shopCartDel">
+  	delete from LVCartList where idx = #{idx};
+  </delete>
+  
+   <delete id="delDbCartList">
+    delete from LVCartList where idx = #{cartIdx};
+  </delete>
+  
+  <update id="shopCartUpdate">
+  	update LVCartList set optionNum=#{vo.optionNum},totalPrice=totalPrice+#{vo.totalPrice} where productName=#{vo.productName} and optionName=#{vo.optionName} and optionColor=#{vo.optionColor};
+  </update>
+  
+  <update id="setMemberPointPlus">
+  	update LVmember set point = point - #{point}, point = point + #{savePoint} where mid = #{mid};
+  </update>
+  
+  <update id="mygumeCheck">
+  	update LVBaesong set orderStatus = '구매확정' where orderIdx = #{orderIdx};
+  </update>
+  
+  <update id="mygumeCheck2">
+  	update LVBaesong set orderStatus = '반품처리' where orderIdx = #{orderIdx};
+  </update>
+  
+  <update id="mygumeCheck3">
+  	update LVBaesong set orderStatus = '배송완료' where orderIdx = #{orderIdx};
+  </update>
+  
+  <update id="shopProductWishUpdate">
+	  <if test="vo.wish == 0">
+	  	update LVproduct set wishCnt=wishCnt-1 where idx = #{vo.productIdx};
+	  </if>
+	  <if test="vo.wish != 0">
+	  	update LVproduct set wishCnt=wishCnt+1 where idx = #{vo.productIdx};
+	  </if>
+  </update>
+  
+  <update id="optionNumUpdate">
+  	update LVOption set optionNum = optionNum - #{optionNum} where productIdx = #{productIdx} and optionName=#{optionName} and optionColor=#{optionColor};
+  </update>
+  
+  <update id="chartUpdate"> <!-- 차트 =================================== -->
+  	update LVcharts set realPrice = realPrice + #{vo.realPrice}*#{optionNum}, disPrice = disPrice + #{vo.disPrice}*#{optionNum}, margin = margin + ((#{vo.disPrice}*#{optionNum})-(#{vo.realPrice}*#{optionNum})),selNum = selNum + #{optionNum} where productIdx = #{vo.productIdx} and orderDate = #{date};
+  </update>
+  
+  <delete id="shopWishUpdate">
+  	delete from LVwish where productIdx=#{vo.productIdx} and mid =#{mid};
+  </delete>
+  
+  <delete id="wishDel">
+  	delete from LVwish where idx = #{idx};
+  </delete>
+  
+</mapper>
