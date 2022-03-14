@@ -1,0 +1,9 @@
+		.mybtn3 {
+			width: 300px;
+			height: 35px;
+			background: linear-gradient(120deg,#9C7521,#FFDF73);
+			border-radius: 4px;
+			border: 0;
+			color: white;
+		}
+		.mybtn3:hover{background-position: right;}
