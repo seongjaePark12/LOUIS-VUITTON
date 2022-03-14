@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.cjs2108_psj.dao.AdminDAO">
+	<select id="totRecCnt" resultType="int">
+		<if test="level == 99">select count(*) from LVmember;</if>
+		<if test="level != 99">select count(*) from LVmember where level = #{level};</if>
+	</select>
+
+	<select id="getNewMember" resultType="int">
+		select count(*) from LVmember where level = 4;
+	</select>
+
+	<select id="getNewQuestion" resultType="int">
+		select count(*) from LVquestion where anser = 0;
+	</select>
+
+	<select id="getNewBooking" resultType="int">
+		select count(*) from LVbooking where booDate > now();
+	</select>
+
+	<select id="getNewOrder" resultType="int">
+		select count(*) from LVBaesong where orderStatus = '결제완료';
+	</select>
+	
+	<select id="totRecCntMid" resultType="int">
+		select count(*) from LVmember where mid like concat('%',#{mid},'%');
+	</select>
+	
+	<select id="getMemberList" resultType="com.spring.cjs2108_psj.vo.MemberVO">
+		<if test="level == 99">select * from LVmember order by idx desc limit #{startIndexNo}, #{pageSize};</if>
+		<if test="level != 99">select * from LVmember where level = #{level} order by idx desc limit #{startIndexNo}, #{pageSize};</if>
+	</select>
+	
+	<select resultType="com.spring.cjs2108_psj.vo.MemberVO" id="getMemberListMid">
+		select * from LVmember where mid like concat('%',#{mid},'%') order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<update id="setLevelUpdate">
+		update LVmember set level = #{level} where idx = #{idx};
+	</update>
+	
+	<delete id="setMemberDelete">
+		delete from LVmember where idx = #{idx};
+	</delete>
+	
+	<update id="setMemberLevel">
+		update LVmember set level = #{level} where idx = #{idx};
+	</update>
+	
+	<select id="simpleTotRecCnt" resultType="int">
+		<if test="what == ''">select count(*) from LVSimple;</if>
+		<if test="what != ''">select count(*) from LVSimple where what = #{what};</if>
+	</select>
+	
+	<select id="simpleGet" resultType="com.spring.cjs2108_psj.vo.SimpleVO">
+		<if test="what == ''">select * from LVSimple order by idx desc limit #{startIndexNo}, #{pageSize};</if>
+		<if test="what != ''">select * from LVSimple where what = #{what} order by idx desc limit #{startIndexNo}, #{pageSize};</if>
+	</select>
+	
+	<insert id="setSimpleInput">
+		insert into LVSimple values (default, #{vo.title}, #{vo.what}, #{vo.content});
+	</insert>
+	
+	<delete id="setSimpleDelete">
+		delete from LVSimple where idx = #{idx}
+	</delete>
+	
+	<update id="setQuestionUpdate">
+		update LVquestion set anser = #{anser} where idx = #{idx};
+	</update>
+	
+	<delete id="setQuestionDelete">
+		delete from LVquestion where idx = #{idx};
+	</delete>
+	
+	<update id="setQuestionLevel">
+		update LVquestion set anser = #{anser} where idx = #{idx};
+	</update>
+	
+	<update id="setOrderLevel">
+		update LVBaesong set orderStatus = #{orderStatus} where orderIdx = #{orderIdx};
+	</update>
+	
+	<update id="baesongNumUp">
+		update LVBaesong set baesongNum = #{baesongNum} where orderIdx = #{orderIdx};
+	</update>
+	
+  <update id="setOrderStatusUpdate">
+    update LVBaesong set orderStatus = #{orderStatus} where orderIdx = #{orderIdx};
+  </update>
+	
+	<delete id="setBookingDelete">
+		delete from LVbooking where idx=#{idx};
+	</delete>
+	
+	<select id="totRecCntBooking" resultType="int">
+		select count(*) from LVbooking;
+	</select>
+	
+	<select id="totRecCntName" resultType="int">
+		select count(*) from LVbooking where name like concat('%',#{name},'%');
+	</select>
+	
+	<select id="getBookingList" resultType="com.spring.cjs2108_psj.vo.BookingVO">
+		select * from LVbooking order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getBookingListName" resultType="com.spring.cjs2108_psj.vo.BookingVO">
+		select * from LVbooking where name like concat('%',#{name},'%') order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="yearCash" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+		select YEAR(orderDate) as yearDate,sum(realPrice) as realPrices,sum(disPrice) as disPrices,sum(margin) as margins from LVcharts group by YEAR(orderDate) order by orderDate;
+	</select>
+	
+	<select id="monthCash" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+		<if test="year == ''">
+		select YEAR(orderDate) as yearDate,MONTH(orderDate) as monthDate,sum(realPrice) as realPrices,sum(disPrice) as disPrices,sum(margin) as margins from LVcharts where YEAR(orderDate)='2022' group by MONTH(orderDate) order by orderDate;
+		</if>
+		<if test="year != ''">
+		select YEAR(orderDate) as yearDate,MONTH(orderDate) as monthDate,sum(realPrice) as realPrices,sum(disPrice) as disPrices,sum(margin) as margins from LVcharts where YEAR(orderDate)=#{year} group by MONTH(orderDate) order by orderDate;
+		</if>
+	</select>
+	
+	<select id="dayCash" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+	<if test="year2 == '' and month == ''">
+		select YEAR(orderDate)as yearDate, MONTH(orderDate) as monthDate, DAY(orderDate) as dayDates,sum(realPrice) as realPrices,sum(disPrice) as disPrices,sum(margin) as margins from LVcharts where YEAR(orderDate)='2022' and MONTH(orderDate)='01' group by DAY(orderDate) order by orderDate;
+	</if>
+	<if test="year2 != '' and month != ''">
+		select YEAR(orderDate)as yearDate, MONTH(orderDate) as monthDate, DAY(orderDate) as dayDates,sum(realPrice) as realPrices,sum(disPrice) as disPrices,sum(margin) as margins from LVcharts where YEAR(orderDate)=#{year2} and MONTH(orderDate)=#{month} group by DAY(orderDate) order by orderDate;
+	</if>
+	</select>
+	
+	<select id="productNum" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+		select YEAR(orderDate) as yearDate,sum(selNum) as selNums from LVcharts group by YEAR(orderDate) order by orderDate;
+	</select>
+	
+	<select id="productmNum" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+		<if test="year == ''">
+		select YEAR(orderDate) as yearDate,MONTH(orderDate) as monthDate,sum(selNum) as selNums from LVcharts where YEAR(orderDate)='2022' group by MONTH(orderDate) order by orderDate;
+		</if>
+		<if test="year != ''">
+		select YEAR(orderDate) as yearDate,MONTH(orderDate) as monthDate,sum(selNum) as selNums from LVcharts where YEAR(orderDate)=#{year} group by MONTH(orderDate) order by orderDate;
+		</if>
+	</select>
+	
+	<select id="productdNum" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+	<if test="year2 == '' and month == ''">
+		select YEAR(orderDate)as yearDate, MONTH(orderDate) as monthDate, DAY(orderDate) as dayDates,sum(selNum) as selNums from LVcharts where YEAR(orderDate)='2022' and MONTH(orderDate)='01' group by DAY(orderDate) order by orderDate;
+	</if>
+	<if test="year2 != '' and month != ''">
+		select YEAR(orderDate)as yearDate, MONTH(orderDate) as monthDate, DAY(orderDate) as dayDates,sum(selNum) as selNums from LVcharts where YEAR(orderDate)=#{year2} and MONTH(orderDate)=#{month} group by DAY(orderDate) order by orderDate;
+	</if>
+	</select>
+	
+	<select id="productCash" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+		select * from LVcharts order by selNum desc limit 10;
+	</select>
+	
+	<select id="productSum" resultType="com.spring.cjs2108_psj.vo.ChartVO">
+		select sum(realPrice) as realPrices,sum(disPrice) as disPrices,sum(margin) as margins,sum(selNum) as selNums from LVcharts;
+	</select>
+	
+</mapper>
