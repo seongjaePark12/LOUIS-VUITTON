@@ -1,12 +1,12 @@
 ## LOUISVUITTON
 # Click 👉<a href = 'http://49.142.157.251:9090/cjs2108_psj/'> LOUISVUITTON</a>
 
-LOUIS VUITTON 쇼핑몰 사이트
+LOUIS VUITTON 쇼핑몰 사이트 <br/>
 반응형 : O
 
 ## 개인 프로젝트
 
-관리자 ID = admin , PW = 1234
+관리자 ID = admin , PW = 1234 <br/>
 회원 ID = 직접 가입 부탁드립니다
 
 ## 1. 구현 목표
@@ -20,11 +20,11 @@ LOUIS VUITTON 쇼핑몰 사이트
 
 ## 3. 개발환경
 
-개발언어 : JAVA(V1.8)
-프로그램 : Spring Framework, VS code 
-서버 : Apache Tomcat 9.0.54
-데이터베이스 : My sql 5.1.49 / HeidiSql 9.5 / Mybatis
-기타 : JSP / HTML5 / CSS / JavaScript / Ajax / Jquery / CKEditor
+개발언어 : JAVA(V1.8) <br/>
+프로그램 : Spring Framework, VS code  <br/>
+서버 : Apache Tomcat 9.0.54 <br/>
+데이터베이스 : My sql 5.1.49 / HeidiSql 9.5 / Mybatis <br/>
+기타 : JSP / HTML5 / CSS / JavaScript / Ajax / Jquery / CKEditor <br/>
 
 ## 4. DB 설계
 
