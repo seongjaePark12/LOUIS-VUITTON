@@ -1,5 +1,6 @@
 ## LOUISVUITTON
 # Click 👉<a href = 'http://49.142.157.251:9090/cjs2108_psj/'> LOUISVUITTON</a>
+구현 영상 - https://www.youtube.com/watch?v=iB53gFsLHpI&t=12s
 
 LOUIS VUITTON 쇼핑몰 사이트 <br/>
 반응형 : O
